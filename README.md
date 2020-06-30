@@ -17,7 +17,7 @@ Use the api supported by betterplot-api package to plot something.
 ### code
 `Plot.plot(Lists.listOf(2, 3, 4), Lists.listOf(4, 5, 6));`
 ### chart
-[img]
+![image](https://github.com/Mng12345/betterplot/blob/master/examples/example01.jpg)
 
 ## example02
 ### api
@@ -29,7 +29,7 @@ Use the api supported by betterplot-api package to plot something.
                 new String[] {"y1", "y2", "y3"}, new String[] {"line", "scatter", "line"},
                 "multi-line-plot", "x");`
 ### chart       
-[img]
+![image](https://github.com/Mng12345/betterplot/blob/master/examples/example02.jpg)
                 
 
 
