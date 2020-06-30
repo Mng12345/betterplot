@@ -35,7 +35,7 @@ public interface DataUtil {
             x[i] = sortedX;
             y[i] = sortedY;
         }
-        mergedX = xSets.toArray();
+        mergedX = xSets.stream().sorted().toArray();
         Number[][] mergedY = new Number[pairNum][];
         // 初始化mergedY
         for (int i=0; i<pairNum; i++) {
