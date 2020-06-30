@@ -107,6 +107,7 @@ public class Plot {
     }
 
     public static void main(String[] args) {
+        Plot.plot(Lists.listOf(2, 3, 4), Lists.listOf(4, 5, 6));
         Plot.plot(Lists.listOf(Lists.listOf(1, 2, 3), Lists.listOf(4, 5, 6)),
                 Lists.listOf(Lists.listOf(3.2, 3.2, 4.5), Lists.listOf(3.2, 4.7, 9.9)),
                 new String[] {"y1", "y2"}, new String[] {"line", "scatter"},
