@@ -30,6 +30,25 @@ Use the api supported by betterplot-api package to plot something.
                 "multi-line-plot", "x");`
 ### chart       
 ![image](https://github.com/Mng12345/betterplot/blob/master/examples/example02.jpg)
-                
+
+## example03 Stream api `of` for easy use
+
+### api
+`public static InnerPlot of()`
+
+### code
+`
+Plot.of()
+    .x(Lists.listOf(Lists.listOf(1, 2, 3), Lists.listOf(2, 4, 5, 6), Lists.listOf(4, 5, 6, 8, 12)))
+    .y(Lists.listOf(Lists.listOf(3.2, 3.2, 4.5), Lists.listOf(1.1, 3.2, 4.7, 9.9), Lists.listOf(2.1, 3.2, 9.8, 12.2, 10.1)))
+    .legend("y1", "y2", "y3")
+    .lineTypes("line", "scatter", "line")
+    .title("mulit-line-stream-api")
+    .xLabel("x")
+    .show();
+`
+
+### chart 
+![image](https://github.com/Mng12345/betterplot/blob/master/examples/example03.jpg)
 
 

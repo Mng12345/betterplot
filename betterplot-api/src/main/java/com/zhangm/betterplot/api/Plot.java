@@ -62,12 +62,18 @@ public class Plot {
             return this;
         }
 
-        public InnerPlot legend(String[] legend) {
+        public InnerPlot legend(String... legend) {
+            if (legend.length != y.size()) {
+                throw new RuntimeException("the length of lengend must equals to the length of y");
+            }
             this.legend = legend;
             return this;
         }
 
-        public InnerPlot lineTypes(String[] lineTypes) {
+        public InnerPlot lineTypes(String... lineTypes) {
+            if (lineTypes.length != y.size()) {
+                throw new RuntimeException("the length of lineTypes must equals to the length of y");
+            }
             this.lineTypes = lineTypes;
             return this;
         }
@@ -173,14 +179,22 @@ public class Plot {
     }
 
     public static void main(String[] args) {
-        Plot.plot(Lists.listOf(2, 3, 4), Lists.listOf(4, 5, 6));
-        Plot.plot(Lists.listOf(Lists.listOf(1, 2, 3), Lists.listOf(4, 5, 6)),
-                Lists.listOf(Lists.listOf(3.2, 3.2, 4.5), Lists.listOf(3.2, 4.7, 9.9)),
-                new String[] {"y1", "y2"}, new String[] {"line", "scatter"},
-                "multi-line-plot", "x");
+//        Plot.plot(Lists.listOf(2, 3, 4), Lists.listOf(4, 5, 6));
+//        Plot.plot(Lists.listOf(Lists.listOf(1, 2, 3), Lists.listOf(4, 5, 6)),
+//                Lists.listOf(Lists.listOf(3.2, 3.2, 4.5), Lists.listOf(3.2, 4.7, 9.9)),
+//                new String[] {"y1", "y2"}, new String[] {"line", "scatter"},
+//                "multi-line-plot", "x");
         Plot.plot(Lists.listOf(Lists.listOf(1, 2, 3), Lists.listOf(2, 4, 5, 6), Lists.listOf(4, 5, 6, 8, 12)),
                 Lists.listOf(Lists.listOf(3.2, 3.2, 4.5), Lists.listOf(1.1, 3.2, 4.7, 9.9), Lists.listOf(2.1, 3.2, 9.8, 12.2, 10.1)),
                 new String[] {"y1", "y2", "y3"}, new String[] {"line", "scatter", "line"},
                 "multi-line-plot", "x");
+        Plot.of()
+                .x(Lists.listOf(Lists.listOf(1, 2, 3), Lists.listOf(2, 4, 5, 6), Lists.listOf(4, 5, 6, 8, 12)))
+                .y(Lists.listOf(Lists.listOf(3.2, 3.2, 4.5), Lists.listOf(1.1, 3.2, 4.7, 9.9), Lists.listOf(2.1, 3.2, 9.8, 12.2, 10.1)))
+                .legend("y1", "y2", "y3")
+                .lineTypes("line", "scatter", "line")
+                .title("mulit-line-stream-api")
+                .xLabel("x")
+                .show();
     }
 }
