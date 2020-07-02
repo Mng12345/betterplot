@@ -11,6 +11,10 @@ import com.zhangm.betterplot.entity.XAxis;
 import com.zhangm.betterplot.util.DataUtil;
 import com.zhangm.betterplot.util.Lists;
 import com.zhangm.easyutil.Tuple;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -34,6 +38,87 @@ public class Plot {
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
         System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "fatal");
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class InnerPlot {
+
+        private List<? extends List<? extends Object>> x;
+        private List<? extends List<? extends Number>> y;
+        private String[] legend;
+        private String[] lineTypes;
+        private String title;
+        private String xLabel;
+
+        public InnerPlot x(List<? extends List<? extends Object>> x) {
+            this.x = x;
+            return this;
+        }
+
+        public InnerPlot y(List<? extends List<? extends Number>> y) {
+            this.y = y;
+            return this;
+        }
+
+        public InnerPlot legend(String[] legend) {
+            this.legend = legend;
+            return this;
+        }
+
+        public InnerPlot lineTypes(String[] lineTypes) {
+            this.lineTypes = lineTypes;
+            return this;
+        }
+
+        public InnerPlot title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public InnerPlot xLabel(String xLabel) {
+            this.xLabel = xLabel;
+            return this;
+        }
+
+        /**
+         * 检测所有参数是否全部设置完成
+         */
+        private void checkArgs() {
+            if (x == null || y == null || legend == null || lineTypes == null || "".equals(title) || "".equals(xLabel)) {
+                throw new RuntimeException("请完成所有参数配置，title和xLabel不能为空字符串");
+            }
+        }
+
+        public void show() {
+            checkArgs();
+            String serverHost = config.getString("betterplot-server.host");
+            String port = config.getString("betterplot-server.port");
+            // 合并x和y
+            Object[][] arrayX = x.stream().map(item -> item.toArray(Object[]::new)).toArray(Object[][]::new);
+            Number[][] arrayY = y.stream().map(item -> item.toArray(Number[]::new)).toArray(Number[][]::new);
+            Tuple<Object[], Number[][]> mergedXY = DataUtil.merge(arrayX, arrayY);
+            Data data = Data.builder()
+                    .title(Title.builder().text(title).build())
+                    .xAxis(XAxis.builder().data(mergedXY.getV1()).type("category").name(xLabel).build())
+                    .series(Streams.mapWithIndex(Arrays.stream(mergedXY.getV2()), (Number[] item, long index) ->
+                            Series.builder().data(item).type(lineTypes[(int)index]).name(legend[(int)index]).build()
+                    ).toArray(Series[]::new))
+                    .build()
+                    .generateLegend();
+            try {
+                pushData(data);
+                System.out.println(String.format("click http://%s:%s/ to show the chart", serverHost, port));
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+    }
+
+    public static InnerPlot of() {
+        return new InnerPlot();
     }
 
     private static void pushData(Data data) throws IOException {
@@ -84,26 +169,7 @@ public class Plot {
      */
     public static void plot(List<? extends List<? extends Object>> x, List<? extends List<? extends Number>> y, String[] legend,
                             String[] lineTypes, String title, String xLabel) {
-        String serverHost = config.getString("betterplot-server.host");
-        String port = config.getString("betterplot-server.port");
-        // 合并x和y
-        Object[][] arrayX = x.stream().map(item -> item.toArray(Object[]::new)).toArray(Object[][]::new);
-        Number[][] arrayY = y.stream().map(item -> item.toArray(Number[]::new)).toArray(Number[][]::new);
-        Tuple<Object[], Number[][]> mergedXY = DataUtil.merge(arrayX, arrayY);
-        Data data = Data.builder()
-                .title(Title.builder().text(title).build())
-                .xAxis(XAxis.builder().data(mergedXY.getV1()).type("category").name(xLabel).build())
-                .series(Streams.mapWithIndex(Arrays.stream(mergedXY.getV2()), (Number[] item, long index) ->
-                    Series.builder().data(item).type(lineTypes[(int)index]).name(legend[(int)index]).build()
-                ).toArray(Series[]::new))
-                .build()
-                .generateLegend();
-        try {
-            pushData(data);
-            System.out.println(String.format("click http://%s:%s/ to show the chart", serverHost, port));
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+        of().x(x).y(y).legend(legend).lineTypes(lineTypes).xLabel(xLabel).show();
     }
 
     public static void main(String[] args) {
