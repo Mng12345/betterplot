@@ -38,14 +38,14 @@ Use the api supported by betterplot-api package to plot something.
 
 ### code
 `
-Plot.of()
-    .x(Lists.listOf(Lists.listOf(1, 2, 3), Lists.listOf(2, 4, 5, 6), Lists.listOf(4, 5, 6, 8, 12)))
-    .y(Lists.listOf(Lists.listOf(3.2, 3.2, 4.5), Lists.listOf(1.1, 3.2, 4.7, 9.9), Lists.listOf(2.1, 3.2, 9.8, 12.2, 10.1)))
-    .legend("y1", "y2", "y3")
-    .lineTypes("line", "scatter", "line")
-    .title("mulit-line-stream-api")
-    .xLabel("x")
-    .show();
+Plot.of()<br>
+    .x(Lists.listOf(Lists.listOf(1, 2, 3), Lists.listOf(2, 4, 5, 6), Lists.listOf(4, 5, 6, 8, 12)))<br>
+    .y(Lists.listOf(Lists.listOf(3.2, 3.2, 4.5), Lists.listOf(1.1, 3.2, 4.7, 9.9), Lists.listOf(2.1, 3.2, 9.8, 12.2, 10.1)))<br>
+    .legend("y1", "y2", "y3")<br>
+    .lineTypes("line", "scatter", "line")<br>
+    .title("mulit-line-stream-api")<br>
+    .xLabel("x")<br>
+    .show();<br>
 `
 
 ### chart 
