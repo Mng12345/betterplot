@@ -11,7 +11,6 @@ import com.zhangm.betterplot.entity.XAxis;
 import com.zhangm.betterplot.util.DataUtil;
 import com.zhangm.betterplot.util.Lists;
 import com.zhangm.easyutil.Tuple;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +23,7 @@ import org.apache.http.impl.client.HttpClients;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author zhangming
@@ -43,7 +43,7 @@ public class Plot {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class InnerPlot {
+    public static class InnerPlot<E> {
 
         private List<? extends List<? extends Object>> x;
         private List<? extends List<? extends Number>> y;
@@ -57,8 +57,41 @@ public class Plot {
             return this;
         }
 
+        public InnerPlot x(double[]... x) {
+            this.x = Arrays.stream(x).map(xItem -> Arrays.stream(xItem).boxed().collect(Collectors.toList()))
+                    .collect(Collectors.toList());
+            return this;
+        }
+
+        public InnerPlot x(String[]... x) {
+            this.x = Arrays.stream(x).map(xItem -> Arrays.stream(xItem).collect(Collectors.toList())).collect(Collectors.toList());
+            return this;
+        }
+
+        public final InnerPlot x(List<?>... x) {
+            this.x = Arrays.stream(x).collect(Collectors.toList());
+            return this;
+        }
+
         public InnerPlot y(List<? extends List<? extends Number>> y) {
             this.y = y;
+            return this;
+        }
+
+        public InnerPlot y(double[]... y) {
+            this.y = Arrays.stream(y).map(xItem -> Arrays.stream(xItem).boxed().collect(Collectors.toList()))
+                    .collect(Collectors.toList());
+            return this;
+        }
+
+        public InnerPlot y(int[]... y) {
+            this.y = Arrays.stream(y).map(xItem -> Arrays.stream(xItem).boxed().collect(Collectors.toList())).collect(Collectors.toList());
+            return this;
+        }
+
+        @SafeVarargs
+        public final InnerPlot y(List<? extends Number>... y) {
+            this.y = Arrays.stream(y).collect(Collectors.toList());
             return this;
         }
 
